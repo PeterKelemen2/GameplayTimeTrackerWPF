@@ -5,8 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameplayTimeTracker"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Canvas Name="mainCanvas">
-        <!-- Tiles will be added here dynamically -->
-    </Canvas>
+        Title="MainWindow" Height="650" Width="800">
+    <Grid>
+        <!-- Define row definitions for the Grid -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Scrollable area in the top 3/4 -->
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Canvas Name="mainCanvas" Background="LightSkyBlue">
+                <!-- Tiles will be added here dynamically -->
+            </Canvas>
+        </ScrollViewer>
+
+        <!-- Other content in the bottom 1/4 -->
+        <StackPanel Grid.Row="1" Background="LightGreen">
+            <!-- Add other UI elements here -->
+            <TextBlock Text="Other content here" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </StackPanel>
+    </Grid>
 </Window>

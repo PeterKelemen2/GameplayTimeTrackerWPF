@@ -9,6 +9,69 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
+public class GradientBar : UserControl
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    public double Percent { get; set; }
+    public Color Color1 { get; set; }
+    public Color Color2 { get; set; }
+    public Color BgColor { get; set; }
+    public double Padding { get; set; }
+    public double Radius { get; set; }
+
+    public GradientBar(double width, double height, double percent, Color color1, Color color2, Color bgColor,
+        double padding = 5,
+        double radius = 10)
+    {
+        Width = width;
+        Height = height;
+        Percent = percent;
+        Color1 = color1;
+        Color2 = color2;
+        BgColor = bgColor;
+        Padding = padding;
+        Radius = radius;
+        InitializeBar();
+    }
+
+    private void InitializeBar()
+    {
+        Grid grid = new Grid();
+
+        LinearGradientBrush gradientBrush = new LinearGradientBrush();
+        gradientBrush.StartPoint = new Point(0, 0);
+        gradientBrush.EndPoint = new Point(1, 0);
+        gradientBrush.GradientStops.Add(new GradientStop(Color1, 0.0));
+        gradientBrush.GradientStops.Add(new GradientStop(Color2, 1.0));
+
+        Rectangle barBackground = new Rectangle
+        {
+            Width = Width,
+            Height = Height,
+            RadiusX = Radius,
+            RadiusY = Radius,
+            Fill = new SolidColorBrush(BgColor)
+        };
+
+        Rectangle barForeground = new Rectangle
+        {
+            Width = (Width - 2 * Padding) * Percent,
+            Height = Height - 2 * Padding,
+            RadiusX = Radius - Padding / 2,
+            RadiusY = Radius - Padding / 2,
+            Fill = gradientBrush,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Margin = new Thickness(Padding, 0, 0, 0)
+        };
+
+        grid.Children.Add(barBackground);
+        grid.Children.Add(barForeground);
+
+        Content = grid;
+    }
+}
+
 public class Tile : UserControl
 {
     private const int TextMargin = 10;
@@ -16,13 +79,12 @@ public class Tile : UserControl
     private const int TextFontSize = 10;
 
     private const string SampleImagePath = "/assets/fallout3.png";
-    // private const string DarkColor = "#1E2030";
-    // private const string LightColor = "#24273A";
-    // private const string FontColor = "#9EABFF";
 
     Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     Color LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
     Color FontColor = (Color)ColorConverter.ConvertFromString("#9EABFF");
+    Color LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
+    Color RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
     public double TileWidth { get; set; }
     public double TileHeight { get; set; }
     public double CornerRadius { get; set; }
@@ -46,7 +108,7 @@ public class Tile : UserControl
         Stopwatch stopwatch = Stopwatch.StartNew();
         InitializeTile();
         stopwatch.Stop();
-        // Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
+        Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
     }
 
     private void InitializeTile()
@@ -89,10 +151,26 @@ public class Tile : UserControl
         };
         RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
 
+        Random random = new Random();
+        GradientBar gradientBar = new GradientBar(
+            width: 150,
+            height: 30,
+            percent: random.NextDouble(),
+            color1: LeftColor,
+            color2: RightColor,
+            bgColor: DarkColor
+        )
+        {
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Bottom,
+            Margin = new Thickness(TextMargin, 0, 20, TextMargin)
+        };
+
         // Add the Rectangle and TextBlock to the Grid
         grid.Children.Add(container);
         grid.Children.Add(titleTextBlock);
         grid.Children.Add(image);
+        grid.Children.Add(gradientBar);
 
         // Set the Grid as the content of the UserControl
         Content = grid;

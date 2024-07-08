@@ -76,13 +76,13 @@ public class Tile : UserControl
 {
     private const int TextMargin = 10;
     private const int TitleFontSize = 17;
-    private const int TextFontSize = 10;
+    private const int TextFontSize = 14;
 
     private const string SampleImagePath = "/assets/fallout3.png";
 
     Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
     Color LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
-    Color FontColor = (Color)ColorConverter.ConvertFromString("#9EABFF");
+    Color FontColor = (Color)ColorConverter.ConvertFromString("#C1C9FF");
     Color LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
     Color RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
     public double TileWidth { get; set; }
@@ -116,6 +116,10 @@ public class Tile : UserControl
         // Create a Grid to hold the Rectangle and TextBlock
         Grid grid = new Grid();
 
+        double contentTopMargin = TileHeight / 2 - TitleFontSize - TextMargin;
+        double leftMargintCol1 = TextMargin + TileHeight + 20;
+        double leftMargintCol2 = leftMargintCol1 * 2.3;
+
         // Create a Rectangle with rounded corners
         Rectangle container = new Rectangle
         {
@@ -146,13 +150,35 @@ public class Tile : UserControl
             Width = TileHeight / 2,
             Height = TileHeight / 2,
             HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(10, 20, 0, 0),
+            VerticalAlignment = VerticalAlignment.Top,
+            // Centering between the bottom and the text 
+            Margin = new Thickness(10, contentTopMargin, 0, 0),
         };
         RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
 
         Random random = new Random();
-        GradientBar gradientBar = new GradientBar(
+        TextBlock totalPlaytimeTitle = new TextBlock
+        {
+            Text = "Total Playtime:", // Bind to the Text property of the UserControl
+            FontWeight = FontWeights.Bold,
+            FontSize = TextFontSize,
+            Foreground = new SolidColorBrush(FontColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(leftMargintCol1, contentTopMargin - 10, 0, 0)
+        };
+        TextBlock totalPlaytime = new TextBlock
+        {
+            Text =
+                $"{random.NextInt64(0, 1000)}h {random.NextInt64(0, 59)}m", // Bind to the Text property of the UserControl
+            FontWeight = FontWeights.Normal,
+            FontSize = TextFontSize,
+            Foreground = new SolidColorBrush(FontColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(leftMargintCol1, contentTopMargin + 15, 0, 0)
+        };
+        GradientBar totalTimeGradientBar = new GradientBar(
             width: 150,
             height: 30,
             percent: random.NextDouble(),
@@ -161,16 +187,58 @@ public class Tile : UserControl
             bgColor: DarkColor
         )
         {
-            HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Bottom,
-            Margin = new Thickness(TextMargin, 0, 20, TextMargin)
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(leftMargintCol1, contentTopMargin + 40, 0, 0)
+        };
+        
+        TextBlock lastPlaytimeTitle = new TextBlock
+        {
+            Text = "Last Playtime:", // Bind to the Text property of the UserControl
+            FontWeight = FontWeights.Bold,
+            FontSize = TextFontSize,
+            Foreground = new SolidColorBrush(FontColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(leftMargintCol2, contentTopMargin - 10, 0, 0)
+        };
+        TextBlock lastPlaytime = new TextBlock
+        {
+            Text =
+                $"{random.NextInt64(0, 100)}h {random.NextInt64(0, 59)}m", // Bind to the Text property of the UserControl
+            FontWeight = FontWeights.Normal,
+            FontSize = TextFontSize,
+            Foreground = new SolidColorBrush(FontColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(leftMargintCol2, contentTopMargin + 15, 0, 0)
+        };
+        GradientBar lastTimeGradientBar = new GradientBar(
+            width: 150,
+            height: 30,
+            percent: random.NextDouble(),
+            color1: LeftColor,
+            color2: RightColor,
+            bgColor: DarkColor
+        )
+        {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(leftMargintCol2, contentTopMargin + 40, 0, 0)
         };
 
         // Add the Rectangle and TextBlock to the Grid
         grid.Children.Add(container);
         grid.Children.Add(titleTextBlock);
         grid.Children.Add(image);
-        grid.Children.Add(gradientBar);
+
+        grid.Children.Add(totalPlaytimeTitle);
+        grid.Children.Add(totalPlaytime);
+        grid.Children.Add(totalTimeGradientBar);
+        
+        grid.Children.Add(lastPlaytimeTitle);
+        grid.Children.Add(lastPlaytime);
+        grid.Children.Add(lastTimeGradientBar);
 
         // Set the Grid as the content of the UserControl
         Content = grid;

@@ -15,7 +15,7 @@ namespace GameplayTimeTracker
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            AddTilesToCanvas(20, CalculateTileWidth(), 100, 10);
+            AddTilesToCanvas(20, CalculateTileWidth(), 150, 10);
         }
 
         private void AddTilesToCanvas(int tileCount, double tileWidth, double tileHeight, double cornerRadius)

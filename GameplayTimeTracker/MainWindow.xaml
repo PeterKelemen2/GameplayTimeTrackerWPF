@@ -15,7 +15,7 @@
         
         <!-- Scrollable area in the top 3/4 -->
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <Canvas Name="mainCanvas" Background="LightSkyBlue">
+            <Canvas Name="mainCanvas" Background="#1E2030">
                 <!-- Tiles will be added here dynamically -->
             </Canvas>
         </ScrollViewer>

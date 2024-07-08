@@ -14,7 +14,15 @@ public class Tile : UserControl
     private const int TextMargin = 10;
     private const int TitleFontSize = 17;
     private const int TextFontSize = 10;
+
     private const string SampleImagePath = "/assets/fallout3.png";
+    // private const string DarkColor = "#1E2030";
+    // private const string LightColor = "#24273A";
+    // private const string FontColor = "#9EABFF";
+
+    Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
+    Color LightColor = (Color)ColorConverter.ConvertFromString("#2E324A");
+    Color FontColor = (Color)ColorConverter.ConvertFromString("#9EABFF");
     public double TileWidth { get; set; }
     public double TileHeight { get; set; }
     public double CornerRadius { get; set; }
@@ -38,7 +46,7 @@ public class Tile : UserControl
         Stopwatch stopwatch = Stopwatch.StartNew();
         InitializeTile();
         stopwatch.Stop();
-        Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
+        // Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
     }
 
     private void InitializeTile()
@@ -53,9 +61,7 @@ public class Tile : UserControl
             Height = TileHeight,
             RadiusX = CornerRadius,
             RadiusY = CornerRadius,
-            Fill = new SolidColorBrush(Colors.LightGray), // Set the fill color
-            Stroke = new SolidColorBrush(Colors.Black), // Optional: set the border color
-            StrokeThickness = 1 // Optional: set the border thickness
+            Fill = new SolidColorBrush(LightColor), // Set the fill color
         };
 
 
@@ -65,6 +71,7 @@ public class Tile : UserControl
             Text = Text, // Bind to the Text property of the UserControl
             FontWeight = FontWeights.Bold,
             FontSize = TitleFontSize,
+            Foreground = new SolidColorBrush(FontColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(TextMargin, TextMargin / 2, 0, 0)

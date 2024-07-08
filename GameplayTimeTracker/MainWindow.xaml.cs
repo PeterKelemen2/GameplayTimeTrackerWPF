@@ -23,6 +23,24 @@ namespace GameplayTimeTracker
         public MainWindow()
         {
             InitializeComponent();
+            AddTilesToCanvas(5, 200, 100, 10); // Add 5 tiles with width 200, height 100, and corner radius 10
+        }
+
+        private void AddTilesToCanvas(int tileCount, double tileWidth, double tileHeight, double cornerRadius)
+        {
+            double offset = 10;
+
+            for (int i = 0; i < tileCount; i++)
+            {
+                Tile tile = new Tile(tileWidth, tileHeight, cornerRadius);
+
+                // Position the tile on the canvas
+                Canvas.SetLeft(tile, offset); // Fixed horizontal position with a margin of 10
+                Canvas.SetTop(tile, offset + i * (tileHeight + offset)); // 10 is the gap between tiles
+
+                // Add the tile to the canvas
+                mainCanvas.Children.Add(tile);
+            }
         }
     }
 }

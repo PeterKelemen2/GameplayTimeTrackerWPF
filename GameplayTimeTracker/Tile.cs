@@ -118,10 +118,9 @@ public class Tile : UserControl
     public static readonly DependencyProperty TextProperty =
         DependencyProperty.Register("Text", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
-    public Tile(double width, double height, double cornerRadius, string text, double totalTime = 20,
-        double lastPlayedTime = 10)
+    public Tile(string text, double totalTime = 20, double lastPlayedTime = 10, double width = 740)
     {
-        TileWidth = 740;
+        TileWidth = width;
         TileHeight = Height;
         CornerRadius = BorderRadius;
         TotalPlaytime = totalTime;
@@ -135,7 +134,7 @@ public class Tile : UserControl
         // Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
     }
 
-    private void InitializeTile()
+    public void InitializeTile()
     {
         // Create a Grid to hold the Rectangle and TextBlock
         Grid grid = new Grid();
@@ -202,6 +201,7 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(leftMargintCol1, contentTopMargin + 15, 0, 0)
         };
+
         GradientBar totalTimeGradientBar = new GradientBar(
             width: 150,
             height: 30,

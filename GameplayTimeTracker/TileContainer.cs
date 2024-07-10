@@ -45,6 +45,7 @@ public class TileContainer
             foreach (var tile in tilesList)
             {
                 tile.TotalPlaytimePercent = Math.Round(tile.TotalPlaytime / auxPlaytime, 2);
+                tile.InitializeTile();
             }
 
             Console.WriteLine($"Tile added to TileContainer!");

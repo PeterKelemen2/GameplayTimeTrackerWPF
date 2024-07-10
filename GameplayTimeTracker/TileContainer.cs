@@ -14,6 +14,16 @@ public class TileContainer
     // {
     // }
 
+    public List<Tile> GetTiles()
+    {
+        return tilesList;
+    }
+
+    public int GetListCount()
+    {
+        return tilesList.Count;
+    }
+
     public void AddTile(Tile newTile)
     {
         try

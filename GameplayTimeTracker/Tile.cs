@@ -194,7 +194,7 @@ public class Tile : UserControl
         TextBlock totalPlaytime = new TextBlock
         {
             Text =
-                $"{random.NextInt64(0, 1000)}h {random.NextInt64(0, 59)}m", // Bind to the Text property of the UserControl
+                $"{TotalPlaytime}m", // Bind to the Text property of the UserControl
             FontWeight = FontWeights.Normal,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),
@@ -205,7 +205,7 @@ public class Tile : UserControl
         GradientBar totalTimeGradientBar = new GradientBar(
             width: 150,
             height: 30,
-            percent: random.NextDouble(),
+            percent: TotalPlaytimePercent,
             color1: LeftColor,
             color2: RightColor,
             bgColor: DarkColor
@@ -229,7 +229,7 @@ public class Tile : UserControl
         TextBlock lastPlaytime = new TextBlock
         {
             Text =
-                $"{random.NextInt64(0, 100)}h {random.NextInt64(0, 59)}m", // Bind to the Text property of the UserControl
+                $"{LastPlaytime}m", // Bind to the Text property of the UserControl
             FontWeight = FontWeights.Normal,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),
@@ -240,7 +240,7 @@ public class Tile : UserControl
         GradientBar lastTimeGradientBar = new GradientBar(
             width: 150,
             height: 30,
-            percent: random.NextDouble(),
+            percent: LastPlaytimePercent,
             color1: LeftColor,
             color2: RightColor,
             bgColor: DarkColor

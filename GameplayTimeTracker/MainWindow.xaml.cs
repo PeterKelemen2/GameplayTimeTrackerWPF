@@ -14,15 +14,15 @@ namespace GameplayTimeTracker
             // InitializeComponent();
             // Loaded += MainWindow_Loaded;
             TileContainer tileContainer = new TileContainer();
-            tileContainer.AddTile(new Tile(123, 342, 10));
-            tileContainer.AddTile(new Tile(123, 342, 10));
-            tileContainer.AddTile(new Tile(123, 342, 10));
+            tileContainer.AddTile(new Tile(123, 342, 10, "Game1", 120, 40));
+            tileContainer.AddTile(new Tile(123, 342, 10, "Game2", 300, 20));
+            tileContainer.AddTile(new Tile(123, 342, 10, "Game3", 50, 10));
             tileContainer.ListTiles();
 
             tileContainer.RemoveTileById(2);
             tileContainer.ListTiles();
 
-            tileContainer.AddTile(new Tile(123, 342, 10));
+            tileContainer.AddTile(new Tile(123, 342, 10, "GameX"));
 
             tileContainer.ListTiles();
 
@@ -32,25 +32,25 @@ namespace GameplayTimeTracker
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            AddTilesToCanvas(20, CalculateTileWidth(), 150, 10);
+            // AddTilesToCanvas(20, CalculateTileWidth(), 150, 10);
         }
 
-        private void AddTilesToCanvas(int tileCount, double tileWidth, double tileHeight, double cornerRadius)
-        {
-            for (int i = 0; i < tileCount; i++)
-            {
-                Tile tile = new Tile(tileWidth, tileHeight, cornerRadius);
-
-                // Position the tile on the canvas
-                Canvas.SetLeft(tile, Offset); // Fixed horizontal position with a margin of 10
-                Canvas.SetTop(tile, Offset + i * (tileHeight + Offset)); // 10 is the gap between tiles
-
-                // Add the tile to the canvas
-                mainCanvas.Children.Add(tile);
-            }
-
-            mainCanvas.Height = Offset + tileCount * (tileHeight + 10);
-        }
+        // private void AddTilesToCanvas(int tileCount, double tileWidth, double tileHeight, double cornerRadius)
+        // {
+        //     for (int i = 0; i < tileCount; i++)
+        //     {
+        //         Tile tile = new Tile(tileWidth, tileHeight, cornerRadius);
+        //
+        //         // Position the tile on the canvas
+        //         Canvas.SetLeft(tile, Offset); // Fixed horizontal position with a margin of 10
+        //         Canvas.SetTop(tile, Offset + i * (tileHeight + Offset)); // 10 is the gap between tiles
+        //
+        //         // Add the tile to the canvas
+        //         mainCanvas.Children.Add(tile);
+        //     }
+        //
+        //     mainCanvas.Height = Offset + tileCount * (tileHeight + 10);
+        // }
 
         private double CalculateTileWidth()
         {

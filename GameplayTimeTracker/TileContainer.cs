@@ -27,7 +27,16 @@ public class TileContainer
                 newTile.Id = tilesList.ElementAt(tilesList.Count - 1).Id + 1;
             }
 
+
             tilesList.Add(newTile);
+
+            // This accounts for change in percentages when adding new tile
+            double auxPlaytime = CalculateTotalPlaytime();
+            foreach (var tile in tilesList)
+            {
+                tile.TotalPlaytimePercent = Math.Round(tile.TotalPlaytime / auxPlaytime, 2);
+            }
+
             Console.WriteLine($"Tile added to TileContainer!");
         }
         catch (Exception e)
@@ -41,9 +50,13 @@ public class TileContainer
         try
         {
             Console.WriteLine("\nTileContainer content:");
+            Console.WriteLine($"Total Playtime: {CalculateTotalPlaytime()} min");
             foreach (var tile in tilesList)
             {
-                Console.WriteLine($"{tile.Id} | {tile.Text}");
+                Console.WriteLine(
+                    $"Id: {tile.Id} | Name: {tile.Text} | Total: {tile.TotalPlaytime} min |" +
+                    $" Total%: {tile.TotalPlaytimePercent} | Last: {tile.LastPlaytime} | " +
+                    $"Last%: {tile.LastPlaytimePercent}");
             }
         }
         catch (Exception e)
@@ -85,5 +98,16 @@ public class TileContainer
                 }
             }
         }
+    }
+
+    public double CalculateTotalPlaytime()
+    {
+        double playtime = 0;
+        foreach (var tile in tilesList)
+        {
+            playtime += tile.TotalPlaytime;
+        }
+
+        return playtime;
     }
 }

@@ -20,10 +20,12 @@ public class GradientBar : UserControl
     public double Padding { get; set; }
     public double Radius { get; set; }
 
+
     public GradientBar(double width, double height, double percent, Color color1, Color color2, Color bgColor,
         double padding = 5,
         double radius = 10)
     {
+        // Width = width;
         Width = width;
         Height = height;
         Percent = percent;
@@ -77,6 +79,8 @@ public class Tile : UserControl
     private const int TextMargin = 10;
     private const int TitleFontSize = 17;
     private const int TextFontSize = 14;
+    private const double Height = 150;
+    private const double BorderRadius = 10;
 
     private const string SampleImagePath = "/assets/fallout3.png";
 
@@ -91,21 +95,39 @@ public class Tile : UserControl
     public double TileHeight { get; set; }
     public double CornerRadius { get; set; }
 
+    public double TotalPlaytime { get; set; }
+    public double TotalPlaytimePercent { get; set; }
+    public double LastPlaytime { get; set; }
+    public double LastPlaytimePercent { get; set; }
+
+    private double CalculateTileWidth()
+    {
+        // double scrollbarWidth = SystemParameters.VerticalScrollBarWidth;
+        // double width = ActualWidth - (2 * Offset + 2 * scrollbarWidth);
+
+        return ActualWidth - (2 * 10 + 2 * SystemParameters.VerticalScrollBarWidth); // Change 10 to var
+    }
+
     public string Text
     {
         get { return (string)GetValue(TextProperty); }
         set { SetValue(TextProperty, value); }
     }
 
+
     public static readonly DependencyProperty TextProperty =
         DependencyProperty.Register("Text", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
-    public Tile(double width, double height, double cornerRadius)
+    public Tile(double width, double height, double cornerRadius, string text, double totalTime = 20,
+        double lastPlayedTime = 10)
     {
-        TileWidth = width;
-        TileHeight = height;
-        CornerRadius = cornerRadius;
-        Text = "Fallout 3";
+        TileWidth = 740;
+        TileHeight = Height;
+        CornerRadius = BorderRadius;
+        TotalPlaytime = totalTime;
+        LastPlaytime = lastPlayedTime;
+        LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
+        Text = text;
 
         Stopwatch stopwatch = Stopwatch.StartNew();
         InitializeTile();

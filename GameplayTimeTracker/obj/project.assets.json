@@ -25,6 +25,9 @@
       "originalTargetFrameworks": [
         "net7.0-windows"
       ],
+      "sources": {
+        "https://www.nuget.org": {}
+      },
       "frameworks": {
         "net7.0-windows7.0": {
           "targetAlias": "net7.0-windows",
@@ -59,7 +62,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\Peti\\.dotnet\\sdk\\7.0.407\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
       }
     }
   }

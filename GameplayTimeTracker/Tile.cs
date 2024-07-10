@@ -85,6 +85,8 @@ public class Tile : UserControl
     Color FontColor = (Color)ColorConverter.ConvertFromString("#C1C9FF");
     Color LeftColor = (Color)ColorConverter.ConvertFromString("#89ACF2");
     Color RightColor = (Color)ColorConverter.ConvertFromString("#B7BDF8");
+
+    public int Id { get; set; }
     public double TileWidth { get; set; }
     public double TileHeight { get; set; }
     public double CornerRadius { get; set; }
@@ -108,7 +110,7 @@ public class Tile : UserControl
         Stopwatch stopwatch = Stopwatch.StartNew();
         InitializeTile();
         stopwatch.Stop();
-        Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
+        // Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
     }
 
     private void InitializeTile()
@@ -191,7 +193,7 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Top,
             Margin = new Thickness(leftMargintCol1, contentTopMargin + 40, 0, 0)
         };
-        
+
         TextBlock lastPlaytimeTitle = new TextBlock
         {
             Text = "Last Playtime:", // Bind to the Text property of the UserControl
@@ -235,7 +237,7 @@ public class Tile : UserControl
         grid.Children.Add(totalPlaytimeTitle);
         grid.Children.Add(totalPlaytime);
         grid.Children.Add(totalTimeGradientBar);
-        
+
         grid.Children.Add(lastPlaytimeTitle);
         grid.Children.Add(lastPlaytime);
         grid.Children.Add(lastTimeGradientBar);

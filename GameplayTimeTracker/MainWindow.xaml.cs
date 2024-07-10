@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace GameplayTimeTracker
@@ -9,8 +11,23 @@ namespace GameplayTimeTracker
 
         public MainWindow()
         {
-            InitializeComponent();
-            Loaded += MainWindow_Loaded;
+            // InitializeComponent();
+            // Loaded += MainWindow_Loaded;
+            TileContainer tileContainer = new TileContainer();
+            tileContainer.AddTile(new Tile(123, 342, 10));
+            tileContainer.AddTile(new Tile(123, 342, 10));
+            tileContainer.AddTile(new Tile(123, 342, 10));
+            tileContainer.ListTiles();
+
+            tileContainer.RemoveTileById(2);
+            tileContainer.ListTiles();
+
+            tileContainer.AddTile(new Tile(123, 342, 10));
+
+            tileContainer.ListTiles();
+
+            tileContainer.UpdateTileById(1, "Text", "New Value");
+            tileContainer.ListTiles();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

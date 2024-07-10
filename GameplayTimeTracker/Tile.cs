@@ -133,7 +133,8 @@ public class Tile : UserControl
         stopwatch.Stop();
         // Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
     }
-
+    
+    // TODO: Implement a refresh method.
     public void InitializeTile()
     {
         // Create a Grid to hold the Rectangle and TextBlock

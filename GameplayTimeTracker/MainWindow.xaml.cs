@@ -7,7 +7,7 @@ namespace GameplayTimeTracker
 {
     public partial class MainWindow : Window
     {
-        private const double Offset = 10;
+        private const double Offset = 8;
         TileContainer tileContainer = new();
 
         public MainWindow()

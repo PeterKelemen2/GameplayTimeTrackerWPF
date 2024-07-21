@@ -19,17 +19,17 @@ namespace GameplayTimeTracker
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // AddTilesToCanvas(20, CalculateTileWidth(), 150, 10);
-            tileContainer.AddTile(new Tile("Game1", 120, 40));
-            tileContainer.AddTile(new Tile("Game2", 300, 20));
-            tileContainer.AddTile(new Tile("Game3", 50, 25));
-            tileContainer.AddTile(new Tile("Game4", 60, 15));
-            tileContainer.AddTile(new Tile("Game5", 60, 15));
+            tileContainer.AddTile(new Tile(tileContainer, "Game1", 120, 40));
+            tileContainer.AddTile(new Tile(tileContainer, "Game2", 300, 20));
+            tileContainer.AddTile(new Tile(tileContainer, "Game3", 50, 25));
+            tileContainer.AddTile(new Tile(tileContainer, "Game4", 60, 15));
+            tileContainer.AddTile(new Tile(tileContainer, "Game5", 60, 15));
             tileContainer.ListTiles();
 
             tileContainer.RemoveTileById(2);
             tileContainer.ListTiles();
 
-            tileContainer.AddTile(new Tile("GameX"));
+            tileContainer.AddTile(new Tile(tileContainer, "GameX"));
 
             tileContainer.ListTiles();
 

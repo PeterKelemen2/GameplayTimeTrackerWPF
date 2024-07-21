@@ -86,6 +86,7 @@ public class TileContainer
 
     public void RemoveTileById(int id)
     {
+        bool isRemoved = false;
         try
         {
             foreach (var tile in tilesList.ToList())
@@ -93,14 +94,18 @@ public class TileContainer
                 if (tile.Id.Equals(id))
                 {
                     tilesList.Remove(tile);
+                    isRemoved = true;
                 }
             }
-
-            Console.WriteLine($"\nTile with id {id} removed");
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
+        }
+        finally
+        {
+            String message = isRemoved ? $"Tile with ID {id} removed." : $"Couldn't find Tile with ID {id}";
+            Console.WriteLine(message);
         }
     }
 

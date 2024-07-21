@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net.Mime;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
@@ -78,6 +79,7 @@ public class GradientBar : UserControl
 
 public class Tile : UserControl
 {
+    private TileContainer _tileContainer;
     private const int TextMargin = 10;
     private const int TitleFontSize = 17;
     private const int TextFontSize = 14;
@@ -86,7 +88,20 @@ public class Tile : UserControl
     private const int MenuTopMargin = -20;
     private bool isMenuOpen = true;
 
+    private Grid grid;
     private Rectangle menuRectangle;
+    private Rectangle container;
+    private Button editButton;
+    private Button removeButton;
+    private Image image;
+    private TextBlock titleTextBlock;
+    private TextBlock totalPlaytimeTitle;
+    private TextBlock totalPlaytime;
+    private TextBlock lastPlaytimeTitle;
+    private TextBlock lastPlaytime;
+    private GradientBar totalTimeGradientBar;
+    private GradientBar lastTimeGradientBar;
+
 
     private const string SampleImagePath = "/assets/fallout3.png";
 
@@ -108,15 +123,7 @@ public class Tile : UserControl
 
     private double CalculateTileWidth()
     {
-        // double scrollbarWidth = SystemParameters.VerticalScrollBarWidth;
-        // double width = ActualWidth - (2 * Offset + 2 * scrollbarWidth);
-
         return ActualWidth - (2 * 10 + 2 * SystemParameters.VerticalScrollBarWidth); // Change 10 to var
-    }
-
-    public bool getMenuOpen()
-    {
-        return isMenuOpen;
     }
 
     private void ToggleEdit(object sender, RoutedEventArgs e)
@@ -162,6 +169,39 @@ public class Tile : UserControl
         Console.WriteLine(isMenuOpen);
     }
 
+    public void DeleteTile(object sender, RoutedEventArgs e)
+    {
+        double animationDuration = 0.2;
+
+        DoubleAnimation heightAnimation = new DoubleAnimation
+        {
+            From = TileHeight,
+            To = 0,
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+        };
+
+        DoubleAnimation opacityAnimation = new DoubleAnimation
+        {
+            From = 1,
+            To = 0,
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+        };
+
+        heightAnimation.Completed += (s, a) =>
+        {
+            // Remove the tile from the container and the parent after the animation completes
+            _tileContainer.RemoveTileById(Id);
+            if (Parent is Panel panel)
+            {
+                panel.Children.Remove(this);
+            }
+        };
+
+        // Apply the animations to the tile
+        BeginAnimation(HeightProperty, heightAnimation);
+        BeginAnimation(OpacityProperty, opacityAnimation);
+    }
+
     public double GetTotalHeight()
     {
         if (isMenuOpen)
@@ -182,8 +222,10 @@ public class Tile : UserControl
     public static readonly DependencyProperty TextProperty =
         DependencyProperty.Register("Text", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
-    public Tile(string text, double totalTime = 20, double lastPlayedTime = 10, double width = 740)
+    public Tile(TileContainer tileContainer, string text, double totalTime = 20, double lastPlayedTime = 10,
+        double width = 740)
     {
+        _tileContainer = tileContainer;
         TileWidth = width;
         TileHeight = Height;
         CornerRadius = BorderRadius;
@@ -201,7 +243,7 @@ public class Tile : UserControl
     public void InitializeTile()
     {
         // Create a Grid to hold the Rectangle and TextBlock
-        Grid grid = new Grid();
+        grid = new Grid();
 
         // Define the grid rows
         RowDefinition row1 = new RowDefinition();
@@ -221,7 +263,7 @@ public class Tile : UserControl
         };
 
         // Create the second Rectangle
-        Rectangle container = new Rectangle
+        container = new Rectangle
         {
             Width = TileWidth,
             Height = TileHeight,
@@ -230,7 +272,7 @@ public class Tile : UserControl
             Fill = new SolidColorBrush(LightColor),
         };
 
-        Button editButton = new Button
+        editButton = new Button
         {
             Style = (Style)Application.Current.FindResource("RoundedButtonEdit"),
             Height = 40,
@@ -241,7 +283,7 @@ public class Tile : UserControl
         };
         editButton.Click += ToggleEdit;
 
-        Button removeButton = new Button
+        removeButton = new Button
         {
             Style = (Style)Application.Current.FindResource("RoundedButtonRemove"),
             Height = 40,
@@ -250,6 +292,7 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, 0, 50, 0),
         };
+        removeButton.Click += DeleteTile;
 
         // Place the rectangles in separate rows
         if (isMenuOpen)
@@ -266,7 +309,7 @@ public class Tile : UserControl
         grid.Children.Add(removeButton);
 
         // Create a TextBlock for displaying text
-        TextBlock titleTextBlock = new TextBlock
+        titleTextBlock = new TextBlock
         {
             Text = Text,
             FontWeight = FontWeights.Bold,
@@ -282,7 +325,7 @@ public class Tile : UserControl
         grid.Children.Add(titleTextBlock);
 
         // Create the Image and other UI elements, positioning them in the second row as well
-        Image image = new Image
+        image = new Image
         {
             Source = new BitmapImage(new Uri(SampleImagePath, UriKind.Relative)),
             Stretch = Stretch.UniformToFill,
@@ -299,9 +342,7 @@ public class Tile : UserControl
         grid.Children.Add(image);
 
         // Add playtime elements
-        // (similar changes, placing them in the appropriate row)
-        Random random = new Random();
-        TextBlock totalPlaytimeTitle = new TextBlock
+        totalPlaytimeTitle = new TextBlock
         {
             Text = "Total Playtime:",
             FontWeight = FontWeights.Bold,
@@ -312,7 +353,7 @@ public class Tile : UserControl
             Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0)
         };
 
-        TextBlock totalPlaytime = new TextBlock
+        totalPlaytime = new TextBlock
         {
             Text = $"{TotalPlaytime}m",
             FontWeight = FontWeights.Normal,
@@ -323,7 +364,7 @@ public class Tile : UserControl
             Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0)
         };
 
-        GradientBar totalTimeGradientBar = new GradientBar(
+        totalTimeGradientBar = new GradientBar(
             width: 150,
             height: 30,
             percent: TotalPlaytimePercent,
@@ -337,7 +378,7 @@ public class Tile : UserControl
             Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 40, 0, 0)
         };
 
-        TextBlock lastPlaytimeTitle = new TextBlock
+        lastPlaytimeTitle = new TextBlock
         {
             Text = "Last Playtime:",
             FontWeight = FontWeights.Bold,
@@ -349,7 +390,7 @@ public class Tile : UserControl
                 TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0)
         };
 
-        TextBlock lastPlaytime = new TextBlock
+        lastPlaytime = new TextBlock
         {
             Text = $"{LastPlaytime}m",
             FontWeight = FontWeights.Normal,
@@ -361,7 +402,7 @@ public class Tile : UserControl
                 TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0)
         };
 
-        GradientBar lastTimeGradientBar = new GradientBar(
+        lastTimeGradientBar = new GradientBar(
             width: 150,
             height: 30,
             percent: LastPlaytimePercent,

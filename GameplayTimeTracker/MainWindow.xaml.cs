@@ -49,6 +49,27 @@ namespace GameplayTimeTracker
             }
         }
 
+        public void ShowScrollViewerOverlay(object sender, ScrollChangedEventArgs e)
+        {
+            if (e.VerticalOffset > 0)
+            {
+                OverlayTop.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                OverlayTop.Visibility = Visibility.Collapsed;
+            }
+
+            if (e.VerticalOffset < ScrollViewer.ScrollableHeight)
+            {
+                OverlayBottom.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                OverlayBottom.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private double CalculateTileWidth(bool isScrollbarPresent)
         {
             if (isScrollbarPresent)

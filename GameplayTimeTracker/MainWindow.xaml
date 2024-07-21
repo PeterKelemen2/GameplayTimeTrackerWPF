@@ -176,13 +176,14 @@
         </Style>
 
         <LinearGradientBrush x:Key="OverlayGradientTop" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#1E2030" Offset="0.1" />
-            <GradientStop Color="#11111100" Offset="0.8" />
+            <GradientStop Color="#1E2030" Offset="0.0" />
+            <GradientStop Color="#00000000" Offset="1.0" />
         </LinearGradientBrush>
 
         <LinearGradientBrush x:Key="OverlayGradientBottom" StartPoint="0,1" EndPoint="0,0">
-            <GradientStop Color="#1E2030" Offset="0.1" />
-            <GradientStop Color="#11111100" Offset="0.8" />
+            <!-- Dark color with a slight fade to transparent -->
+            <GradientStop Color="#1E2030" Offset="0.0" />
+            <GradientStop Color="#00000000" Offset="1.0" />
         </LinearGradientBrush>
     </Window.Resources>
 
@@ -193,11 +194,11 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Rectangle x:Name="OverlayTop" Width="800" Height="50"
+        <Rectangle x:Name="OverlayTop" Width="800" Height="40"
                    Fill="{StaticResource OverlayGradientTop}"
                    HorizontalAlignment="Left" VerticalAlignment="Top"
                    Panel.ZIndex="1" />
-        <Rectangle Grid.Row="0" x:Name="OverlayBottom" Width="800" Height="50"
+        <Rectangle Grid.Row="0" x:Name="OverlayBottom" Width="800" Height="40"
                    Fill="{StaticResource OverlayGradientBottom}"
                    HorizontalAlignment="Left" VerticalAlignment="Bottom"
                    Panel.ZIndex="1" />

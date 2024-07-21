@@ -42,28 +42,9 @@ namespace GameplayTimeTracker
         private void ShowTilesOnCanvas()
         {
             var tilesList = tileContainer.GetTiles();
-            // Accounting for the appearance of the scrollbar
-            if (mainCanvas.ActualHeight < Offset + tileContainer.GetTilesTotalHeight())
-            {
-                mainCanvas.Height = (tileContainer.GetListCount() + 1) * Offset + tileContainer.GetTilesTotalHeight();
-                foreach (var tile in tilesList)
-                {
-                    tile.TileWidth = CalculateTileWidth(true);
-                    tile.InitializeTile();
-                }
-            }
-            else
-            {
-                foreach (var tile in tilesList)
-                {
-                    tile.TileWidth = CalculateTileWidth(false);
-                    tile.InitializeTile();
-                }
-            }
-
             foreach (var tile in tilesList)
             {
-                tile.Margin = new Thickness(Offset, 10, 0, 0);
+                tile.Margin = new Thickness(Offset, 5, 0, 5);
                 mainStackPanel.Children.Add(tile);
             }
         }

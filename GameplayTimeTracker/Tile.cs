@@ -317,7 +317,7 @@ public class Tile : UserControl
             Foreground = new SolidColorBrush(FontColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(TextMargin, TextMargin / 2, 0, 0)
+            Margin = new Thickness(TextMargin * 2, TextMargin / 2, 0, 0)
         };
 
         // Add the TextBlock to the grid
@@ -333,7 +333,7 @@ public class Tile : UserControl
             Height = TileHeight / 2,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(10, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
+            Margin = new Thickness(TextMargin * 2, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
         };
         RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
 

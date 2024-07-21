@@ -15,11 +15,13 @@
         </Grid.RowDefinitions>
 
         <!-- Scrollable area in the top 3/4 -->
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <Canvas Name="mainCanvas" Background="#1E2030">
-                <!-- Tiles will be added here dynamically -->
-                <StackPanel x:Name="mainStackPanel" Orientation="Vertical" />
-            </Canvas>
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"
+                      Padding="0,0,8,0" Background="#1E2030">
+            <!-- <Canvas Name="mainCanvas" Background="#1E2030"> -->
+            <!--     ~1~ Tiles will be added here dynamically @1@ -->
+            <!--      -->
+            <!-- </Canvas> -->
+            <StackPanel x:Name="mainStackPanel" Orientation="Vertical" Background="#1E2030" />
         </ScrollViewer>
 
         <!-- Other content in the bottom 1/4 -->

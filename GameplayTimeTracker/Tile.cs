@@ -84,6 +84,8 @@ public class Tile : UserControl
     private const int MenuTopMargin = -20;
     private bool isMenuOpen = true;
 
+    private Rectangle menuRectangle;
+
     private const string SampleImagePath = "/assets/fallout3.png";
 
     Color DarkColor = (Color)ColorConverter.ConvertFromString("#1E2030");
@@ -113,6 +115,13 @@ public class Tile : UserControl
     public bool getMenuOpen()
     {
         return isMenuOpen;
+    }
+
+    private void ToggleEdit(object sender, RoutedEventArgs e)
+    {
+        isMenuOpen = !isMenuOpen;
+        menuRectangle.Visibility = isMenuOpen ? Visibility.Visible : Visibility.Collapsed;
+        Console.WriteLine(isMenuOpen);
     }
 
     public double GetTotalHeight()
@@ -164,7 +173,7 @@ public class Tile : UserControl
         grid.RowDefinitions.Add(row2);
 
         // Create the first Rectangle
-        Rectangle menuRectangle = new Rectangle
+        menuRectangle = new Rectangle
         {
             Width = TileWidth - 30,
             Height = TileHeight,
@@ -193,7 +202,8 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, 0, 100, 0),
         };
-        
+        editButton.Click += ToggleEdit;
+
         Button removeButton = new Button
         {
             Style = (Style)Application.Current.FindResource("RoundedButtonRemove"),

@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Animation;
+
 
 namespace GameplayTimeTracker;
 
@@ -120,7 +122,43 @@ public class Tile : UserControl
     private void ToggleEdit(object sender, RoutedEventArgs e)
     {
         isMenuOpen = !isMenuOpen;
-        menuRectangle.Visibility = isMenuOpen ? Visibility.Visible : Visibility.Collapsed;
+        double animationDuration = 0.15;
+        DoubleAnimation heightAnimation = new DoubleAnimation
+        {
+            From = isMenuOpen ? 0 : TileHeight,
+            To = isMenuOpen ? TileHeight : 0,
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+        };
+
+        DoubleAnimation opacityAnimation = new DoubleAnimation
+        {
+            From = isMenuOpen ? 0 : 1,
+            To = isMenuOpen ? 1 : 0,
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+        };
+
+        heightAnimation.Completed += (s, a) =>
+        {
+            if (!isMenuOpen)
+            {
+                menuRectangle.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                menuRectangle.Visibility = Visibility.Visible;
+            }
+        };
+
+        // Set the visibility to visible before starting the animation if we are opening the menu
+        if (isMenuOpen)
+        {
+            menuRectangle.Visibility = Visibility.Visible;
+        }
+
+        // Apply the animations to the menuRectangle
+        menuRectangle.BeginAnimation(Rectangle.HeightProperty, heightAnimation);
+        menuRectangle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
+
         Console.WriteLine(isMenuOpen);
     }
 
@@ -160,7 +198,6 @@ public class Tile : UserControl
         // Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
     }
 
-    // TODO: Implement a refresh method.
     public void InitializeTile()
     {
         // Create a Grid to hold the Rectangle and TextBlock

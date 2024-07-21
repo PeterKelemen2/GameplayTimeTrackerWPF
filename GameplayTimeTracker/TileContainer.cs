@@ -10,9 +10,6 @@ public class TileContainer
 {
     private List<Tile> tilesList = new();
 
-    // public TileContainer()
-    // {
-    // }
 
     public List<Tile> GetTiles()
     {

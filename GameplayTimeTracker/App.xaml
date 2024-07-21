@@ -34,17 +34,17 @@
                                 <Setter TargetName="Border" Property="Background" Value="LightBlue" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="GreenYellow" />
+                                <Setter TargetName="Border" Property="Background" Value="#199bb3" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                                <Setter TargetName="Border" Property="Background" Value="#199bb3" />
                                 <Setter TargetName="Border" Property="BorderBrush" Value="Gray" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Background" Value="LightGray" />
+            <Setter Property="Background" Value="#3bc9e3" />
             <Setter Property="BorderBrush" Value="Gray" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="5" />
@@ -65,7 +65,7 @@
                             <Grid>
                                 <!-- Define the image and set its properties -->
                                 <Image x:Name="ButtonImage"
-                                       Source="pack://application:,,,/assets/edit.png"
+                                       Source="pack://application:,,,/assets/remove.png"
                                        Stretch="UniformToFill"
                                        Width="20"
                                        Height="20"
@@ -80,10 +80,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="LightBlue" />
+                                <Setter TargetName="Border" Property="Background" Value="#e33b3b" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="GreenYellow" />
+                                <Setter TargetName="Border" Property="Background" Value="#a30202" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="Border" Property="Background" Value="LightGray" />
@@ -93,8 +93,8 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Background" Value="LightGray" />
-            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="Background" Value="#ed0c0c" />
+            <Setter Property="BorderBrush" Value="#ed0c0c" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="5" />
             <Setter Property="HorizontalAlignment" Value="Center" />

@@ -186,12 +186,22 @@ public class Tile : UserControl
 
         Button editButton = new Button
         {
-            Style = (Style)Application.Current.FindResource("RoundedButton"),
+            Style = (Style)Application.Current.FindResource("RoundedButtonEdit"),
             Height = 40,
             Width = 40,
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, 0, 100, 0),
+        };
+        
+        Button removeButton = new Button
+        {
+            Style = (Style)Application.Current.FindResource("RoundedButtonRemove"),
+            Height = 40,
+            Width = 40,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(0, 0, 50, 0),
         };
 
         // Place the rectangles in separate rows
@@ -203,8 +213,10 @@ public class Tile : UserControl
 
         Grid.SetRow(container, 0);
         Grid.SetRow(editButton, 0);
+        Grid.SetRow(removeButton, 0);
         grid.Children.Add(container);
         grid.Children.Add(editButton);
+        grid.Children.Add(removeButton);
 
         // Create a TextBlock for displaying text
         TextBlock titleTextBlock = new TextBlock

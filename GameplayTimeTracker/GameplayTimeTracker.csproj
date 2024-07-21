@@ -12,6 +12,10 @@
       <Content Include="assets\fallout3.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="assets\remove.png" />
+      <Content Include="assets\remove.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

@@ -18,6 +18,7 @@
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Canvas Name="mainCanvas" Background="#1E2030">
                 <!-- Tiles will be added here dynamically -->
+                <StackPanel x:Name="mainStackPanel" Orientation="Vertical" />
             </Canvas>
         </ScrollViewer>
 

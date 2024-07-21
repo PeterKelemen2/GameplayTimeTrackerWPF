@@ -38,6 +38,7 @@ namespace GameplayTimeTracker
             ShowTilesOnCanvas();
         }
 
+
         private void ShowTilesOnCanvas()
         {
             var tilesList = tileContainer.GetTiles();
@@ -60,13 +61,10 @@ namespace GameplayTimeTracker
                 }
             }
 
-            for (int i = 0; i < tileContainer.GetListCount(); i++)
+            foreach (var tile in tilesList)
             {
-                // Console.WriteLine(tilesList[i].TotalPlaytimePercent);
-                Canvas.SetLeft(tilesList[i], Offset);
-                Canvas.SetTop(tilesList[i],
-                    Offset + i * (tilesList[i].GetTotalHeight() + Offset));
-                mainCanvas.Children.Add(tilesList[i]);
+                tile.Margin = new Thickness(Offset, 10, 0, 0);
+                mainStackPanel.Children.Add(tile);
             }
         }
 

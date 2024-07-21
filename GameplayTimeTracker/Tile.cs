@@ -187,8 +187,8 @@ public class Tile : UserControl
         Button editButton = new Button
         {
             Style = (Style)Application.Current.FindResource("RoundedButton"),
-            Height = 30,
-            Width = 30,
+            Height = 40,
+            Width = 40,
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, 0, 100, 0),

@@ -22,7 +22,8 @@ namespace GameplayTimeTracker
             tileContainer.AddTile(new Tile("Game1", 120, 40));
             tileContainer.AddTile(new Tile("Game2", 300, 20));
             tileContainer.AddTile(new Tile("Game3", 50, 25));
-            // tileContainer.AddTile(new Tile("Game4", 60, 15));
+            tileContainer.AddTile(new Tile("Game4", 60, 15));
+            tileContainer.AddTile(new Tile("Game5", 60, 15));
             tileContainer.ListTiles();
 
             tileContainer.RemoveTileById(2);
@@ -40,11 +41,10 @@ namespace GameplayTimeTracker
         private void ShowTilesOnCanvas()
         {
             var tilesList = tileContainer.GetTiles();
-            
             // Accounting for the appearance of the scrollbar
-            if (mainCanvas.ActualHeight < Offset + tileContainer.GetListCount() * (tilesList[0].TileHeight + 10))
+            if (mainCanvas.ActualHeight < Offset + tileContainer.GetTilesTotalHeight())
             {
-                mainCanvas.Height = Offset + tileContainer.GetListCount() * (tilesList[0].TileHeight + 10);
+                mainCanvas.Height = (tileContainer.GetListCount() + 1) * Offset + tileContainer.GetTilesTotalHeight();
                 foreach (var tile in tilesList)
                 {
                     tile.TileWidth = CalculateTileWidth(true);
@@ -63,9 +63,9 @@ namespace GameplayTimeTracker
             for (int i = 0; i < tileContainer.GetListCount(); i++)
             {
                 // Console.WriteLine(tilesList[i].TotalPlaytimePercent);
-                Canvas.SetLeft(tilesList[i], Offset); // Fixed horizontal position with a margin of 10
+                Canvas.SetLeft(tilesList[i], Offset);
                 Canvas.SetTop(tilesList[i],
-                    Offset + i * (tilesList[i].TileHeight + Offset)); // 10 is the gap between tiles
+                    Offset + i * (tilesList[i].GetTotalHeight() + Offset));
                 mainCanvas.Children.Add(tilesList[i]);
             }
         }

@@ -81,6 +81,8 @@ public class Tile : UserControl
     private const int TextFontSize = 14;
     private const double Height = 150;
     private const double BorderRadius = 10;
+    private const int MenuTopMargin = -20;
+    private bool isMenuOpen = true;
 
     private const string SampleImagePath = "/assets/fallout3.png";
 
@@ -108,6 +110,21 @@ public class Tile : UserControl
         return ActualWidth - (2 * 10 + 2 * SystemParameters.VerticalScrollBarWidth); // Change 10 to var
     }
 
+    public bool getMenuOpen()
+    {
+        return isMenuOpen;
+    }
+
+    public double GetTotalHeight()
+    {
+        if (isMenuOpen)
+        {
+            return TileHeight + TileHeight - MenuTopMargin;
+        }
+
+        return TileHeight;
+    }
+
     public string Text
     {
         get { return (string)GetValue(TextProperty); }
@@ -133,32 +150,66 @@ public class Tile : UserControl
         stopwatch.Stop();
         // Console.WriteLine($"Tile initialization time: {stopwatch.Elapsed.TotalNanoseconds / 1000}");
     }
-    
+
     // TODO: Implement a refresh method.
     public void InitializeTile()
     {
         // Create a Grid to hold the Rectangle and TextBlock
         Grid grid = new Grid();
 
-        double contentTopMargin = TileHeight / 2 - TitleFontSize - TextMargin;
-        double leftMargintCol1 = TextMargin + TileHeight + 20;
-        double leftMargintCol2 = leftMargintCol1 * 2.3;
+        // Define the grid rows
+        RowDefinition row1 = new RowDefinition();
+        RowDefinition row2 = new RowDefinition();
+        grid.RowDefinitions.Add(row1);
+        grid.RowDefinitions.Add(row2);
 
-        // Create a Rectangle with rounded corners
+        // Create the first Rectangle
+        Rectangle menuRectangle = new Rectangle
+        {
+            Width = TileWidth - 30,
+            Height = TileHeight,
+            RadiusX = CornerRadius,
+            RadiusY = CornerRadius,
+            Fill = new SolidColorBrush(RightColor),
+            Margin = new Thickness(0, MenuTopMargin, 0, 0)
+        };
+
+        // Create the second Rectangle
         Rectangle container = new Rectangle
         {
             Width = TileWidth,
             Height = TileHeight,
             RadiusX = CornerRadius,
             RadiusY = CornerRadius,
-            Fill = new SolidColorBrush(LightColor), // Set the fill color
+            Fill = new SolidColorBrush(LightColor),
         };
 
+        Button editButton = new Button
+        {
+            Style = (Style)Application.Current.FindResource("RoundedButton"),
+            Height = 30,
+            Width = 30,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(0, 0, 100, 0),
+        };
+
+        // Place the rectangles in separate rows
+        if (isMenuOpen)
+        {
+            Grid.SetRow(menuRectangle, 1);
+            grid.Children.Add(menuRectangle);
+        }
+
+        Grid.SetRow(container, 0);
+        Grid.SetRow(editButton, 0);
+        grid.Children.Add(container);
+        grid.Children.Add(editButton);
 
         // Create a TextBlock for displaying text
         TextBlock titleTextBlock = new TextBlock
         {
-            Text = Text, // Bind to the Text property of the UserControl
+            Text = Text,
             FontWeight = FontWeights.Bold,
             FontSize = TitleFontSize,
             Foreground = new SolidColorBrush(FontColor),
@@ -167,6 +218,11 @@ public class Tile : UserControl
             Margin = new Thickness(TextMargin, TextMargin / 2, 0, 0)
         };
 
+        // Add the TextBlock to the grid
+        Grid.SetRow(titleTextBlock, 0); // Position it in the second row with the container
+        grid.Children.Add(titleTextBlock);
+
+        // Create the Image and other UI elements, positioning them in the second row as well
         Image image = new Image
         {
             Source = new BitmapImage(new Uri(SampleImagePath, UriKind.Relative)),
@@ -175,32 +231,37 @@ public class Tile : UserControl
             Height = TileHeight / 2,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            // Centering between the bottom and the text 
-            Margin = new Thickness(10, contentTopMargin, 0, 0),
+            Margin = new Thickness(10, TileHeight / 2 - TitleFontSize - TextMargin, 0, 0),
         };
         RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
 
+        // Add all other elements as before, positioning them in the second row
+        Grid.SetRow(image, 0);
+        grid.Children.Add(image);
+
+        // Add playtime elements
+        // (similar changes, placing them in the appropriate row)
         Random random = new Random();
         TextBlock totalPlaytimeTitle = new TextBlock
         {
-            Text = "Total Playtime:", // Bind to the Text property of the UserControl
+            Text = "Total Playtime:",
             FontWeight = FontWeights.Bold,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(leftMargintCol1, contentTopMargin - 10, 0, 0)
+            Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0)
         };
+
         TextBlock totalPlaytime = new TextBlock
         {
-            Text =
-                $"{TotalPlaytime}m", // Bind to the Text property of the UserControl
+            Text = $"{TotalPlaytime}m",
             FontWeight = FontWeights.Normal,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(leftMargintCol1, contentTopMargin + 15, 0, 0)
+            Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0)
         };
 
         GradientBar totalTimeGradientBar = new GradientBar(
@@ -214,30 +275,33 @@ public class Tile : UserControl
         {
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(leftMargintCol1, contentTopMargin + 40, 0, 0)
+            Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 40, 0, 0)
         };
 
         TextBlock lastPlaytimeTitle = new TextBlock
         {
-            Text = "Last Playtime:", // Bind to the Text property of the UserControl
+            Text = "Last Playtime:",
             FontWeight = FontWeights.Bold,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(leftMargintCol2, contentTopMargin - 10, 0, 0)
+            Margin = new Thickness((TextMargin + TileHeight + 20) * 2.3,
+                TileHeight / 2 - TitleFontSize - TextMargin - 10, 0, 0)
         };
+
         TextBlock lastPlaytime = new TextBlock
         {
-            Text =
-                $"{LastPlaytime}m", // Bind to the Text property of the UserControl
+            Text = $"{LastPlaytime}m",
             FontWeight = FontWeights.Normal,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(leftMargintCol2, contentTopMargin + 15, 0, 0)
+            Margin = new Thickness((TextMargin + TileHeight + 20) * 2.3,
+                TileHeight / 2 - TitleFontSize - TextMargin + 15, 0, 0)
         };
+
         GradientBar lastTimeGradientBar = new GradientBar(
             width: 150,
             height: 30,
@@ -249,18 +313,20 @@ public class Tile : UserControl
         {
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(leftMargintCol2, contentTopMargin + 40, 0, 0)
+            Margin = new Thickness((TextMargin + TileHeight + 20) * 2.3,
+                TileHeight / 2 - TitleFontSize - TextMargin + 40, 0, 0)
         };
 
-        // Add the Rectangle and TextBlock to the Grid
-        grid.Children.Add(container);
-        grid.Children.Add(titleTextBlock);
-        grid.Children.Add(image);
+        Grid.SetRow(totalPlaytimeTitle, 0);
+        Grid.SetRow(totalPlaytime, 0);
+        Grid.SetRow(totalTimeGradientBar, 0);
+        Grid.SetRow(lastPlaytimeTitle, 0);
+        Grid.SetRow(lastPlaytime, 0);
+        Grid.SetRow(lastTimeGradientBar, 0);
 
         grid.Children.Add(totalPlaytimeTitle);
         grid.Children.Add(totalPlaytime);
         grid.Children.Add(totalTimeGradientBar);
-
         grid.Children.Add(lastPlaytimeTitle);
         grid.Children.Add(lastPlaytime);
         grid.Children.Add(lastTimeGradientBar);

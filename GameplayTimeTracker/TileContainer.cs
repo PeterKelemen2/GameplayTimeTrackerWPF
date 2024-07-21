@@ -19,6 +19,17 @@ public class TileContainer
         return tilesList;
     }
 
+    public double GetTilesTotalHeight()
+    {
+        double sum = 0;
+        foreach (var tile in tilesList)
+        {
+            sum += tile.GetTotalHeight();
+        }
+
+        return sum;
+    }
+
     public int GetListCount()
     {
         return tilesList.Count;

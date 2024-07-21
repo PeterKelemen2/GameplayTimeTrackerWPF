@@ -86,7 +86,8 @@ public class Tile : UserControl
     private const double Height = 150;
     private const double BorderRadius = 10;
     private const int MenuTopMargin = -20;
-    private bool isMenuOpen = true;
+    private bool isMenuOpen = false;
+    private bool wasOpened = false;
 
     private Grid grid;
     private Rectangle menuRectangle;
@@ -143,6 +144,13 @@ public class Tile : UserControl
             To = isMenuOpen ? 1 : 0,
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
+
+        if (!wasOpened)
+        {
+            menuRectangle.Margin = new Thickness(0, MenuTopMargin, 0, 0);
+            menuRectangle.MaxHeight = TileHeight;
+            wasOpened = true;
+        }
 
         heightAnimation.Completed += (s, a) =>
         {
@@ -259,7 +267,8 @@ public class Tile : UserControl
             RadiusX = CornerRadius,
             RadiusY = CornerRadius,
             Fill = new SolidColorBrush(RightColor),
-            Margin = new Thickness(0, MenuTopMargin, 0, 0)
+            // Margin = new Thickness(0, MenuTopMargin, 0, 0)
+            MaxHeight = 0
         };
 
         // Create the second Rectangle
@@ -295,11 +304,8 @@ public class Tile : UserControl
         removeButton.Click += DeleteTile;
 
         // Place the rectangles in separate rows
-        if (isMenuOpen)
-        {
-            Grid.SetRow(menuRectangle, 1);
-            grid.Children.Add(menuRectangle);
-        }
+        Grid.SetRow(menuRectangle, 1);
+        grid.Children.Add(menuRectangle);
 
         Grid.SetRow(container, 0);
         Grid.SetRow(editButton, 0);

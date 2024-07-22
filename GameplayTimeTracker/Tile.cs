@@ -24,6 +24,8 @@ public class GradientBar : UserControl
     public double Padding { get; set; }
     public double Radius { get; set; }
 
+    private Rectangle barBackground;
+    private Rectangle barForeground;
 
     public GradientBar(double width, double height, double percent, Color color1, Color color2, Color bgColor,
         double padding = 5,
@@ -41,7 +43,7 @@ public class GradientBar : UserControl
         InitializeBar();
     }
 
-    private void InitializeBar()
+    public void InitializeBar()
     {
         Grid grid = new Grid();
 
@@ -51,7 +53,7 @@ public class GradientBar : UserControl
         gradientBrush.GradientStops.Add(new GradientStop(Color1, 0.0));
         gradientBrush.GradientStops.Add(new GradientStop(Color2, 1.0));
 
-        Rectangle barBackground = new Rectangle
+        barBackground = new Rectangle
         {
             Width = Width,
             Height = Height,
@@ -60,7 +62,7 @@ public class GradientBar : UserControl
             Fill = new SolidColorBrush(BgColor)
         };
 
-        Rectangle barForeground = new Rectangle
+        barForeground = new Rectangle
         {
             Width = (Width - 2 * Padding) * Percent,
             Height = Height - 2 * Padding,
@@ -110,7 +112,7 @@ public class Tile : UserControl
     private TextBlock editPlaytimeTitle;
     private TextBlock editPlaytimeH;
     private TextBlock editPlaytimeM;
-    private GradientBar totalTimeGradientBar;
+    public GradientBar totalTimeGradientBar;
     private GradientBar lastTimeGradientBar;
 
     private double hTotal;
@@ -272,17 +274,38 @@ public class Tile : UserControl
 
     public void SaveEditedData(object sender, RoutedEventArgs e)
     {
-        if (!Text.Equals(editNameBox.Text))
-        {
-            Text = editNameBox.Text;
-        }
+        titleTextBlock.Text = editNameBox.Text;
+        Console.WriteLine(TotalPlaytime);
+        TotalPlaytime =
+            CalculatePlaytimeFromHnM(double.Parse(editPlaytimeBoxH.Text), double.Parse(editPlaytimeBoxM.Text));
+        (hTotal, mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
 
-        if (hTotal.ToString().Equals(editPlaytimeBoxH.Text) || mTotal.ToString().Equals(editPlaytimeBoxM.Text))
-        {
-            TotalPlaytime = CalculatePlaytimeFromHnM(hTotal, mTotal);
-        }
+        // Text = $"{hTotal}h {mTotal}m"
+        totalPlaytime.Text = $"{hTotal}h {mTotal}m";
+        editPlaytimeBoxH.Text = hTotal.ToString();
+        editPlaytimeBoxM.Text = mTotal.ToString();
+        // totalTimeGradientBar.Percent = Math.Round(TotalPlaytime / _tileContainer.CalculateTotalPlaytime(), 2);
+        // totalTimeGradientBar.InitializeBar();
+        _tileContainer.UpdatePlaytimeBars();
+        _tileContainer.ListTiles();
+    }
 
-        InitializeTile();
+    public void UpdateTotalPlaytimeBar()
+    {
+        TotalPlaytimePercent = Math.Round(TotalPlaytime / _tileContainer.CalculateTotalPlaytime(), 2);
+        totalTimeGradientBar = new GradientBar(
+            width: 150,
+            height: 30,
+            percent: TotalPlaytimePercent,
+            color1: LeftColor,
+            color2: RightColor,
+            bgColor: DarkColor
+        )
+        {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(TextMargin + TileHeight + 20, TileHeight / 2 - TitleFontSize - TextMargin + 40, 0, 0)
+        };
     }
 
     public void DeleteTile(object sender, RoutedEventArgs e)
@@ -328,10 +351,10 @@ public class Tile : UserControl
         return TileHeight;
     }
 
-    public string Text
+    public string GameName
     {
-        get { return (string)GetValue(TextProperty); }
-        set { SetValue(TextProperty, value); }
+        get { return (string)GetValue(GameNameProperty); }
+        set { SetValue(GameNameProperty, value); }
     }
 
     private (double, double) CalculatePlaytimeFromMinutes(double playtime)
@@ -354,10 +377,10 @@ public class Tile : UserControl
         return 60 * h + m;
     }
 
-    public static readonly DependencyProperty TextProperty =
-        DependencyProperty.Register("Text", typeof(string), typeof(Tile), new PropertyMetadata(""));
+    public static readonly DependencyProperty GameNameProperty =
+        DependencyProperty.Register("GameName", typeof(string), typeof(Tile), new PropertyMetadata(""));
 
-    public Tile(TileContainer tileContainer, string text, double totalTime = 20, double lastPlayedTime = 10,
+    public Tile(TileContainer tileContainer, string gameName, double totalTime = 20, double lastPlayedTime = 10,
         double width = 740)
     {
         _tileContainer = tileContainer;
@@ -367,7 +390,7 @@ public class Tile : UserControl
         TotalPlaytime = totalTime;
         LastPlaytime = lastPlayedTime;
         LastPlaytimePercent = Math.Round(LastPlaytime / TotalPlaytime, 2);
-        Text = text;
+        GameName = gameName;
 
         Stopwatch stopwatch = Stopwatch.StartNew();
         InitializeTile();
@@ -413,7 +436,7 @@ public class Tile : UserControl
         editNameBox = new TextBox
         {
             Style = (Style)Application.Current.FindResource("RoundedTextBox"),
-            Text = Text,
+            Text = GameName,
             Width = 150,
             MaxHeight = 0,
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -556,7 +579,7 @@ public class Tile : UserControl
         // Create a TextBlock for displaying text
         titleTextBlock = new TextBlock
         {
-            Text = Text,
+            Text = GameName,
             FontWeight = FontWeights.Bold,
             FontSize = TitleFontSize,
             Foreground = new SolidColorBrush(FontColor),

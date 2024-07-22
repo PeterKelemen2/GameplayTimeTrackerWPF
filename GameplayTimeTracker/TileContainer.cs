@@ -73,7 +73,7 @@ public class TileContainer
             foreach (var tile in tilesList)
             {
                 Console.WriteLine(
-                    $"Id: {tile.Id} | Name: {tile.Text} | Total: {tile.TotalPlaytime} min |" +
+                    $"Id: {tile.Id} | Name: {tile.GameName} | Total: {tile.TotalPlaytime} min |" +
                     $" Total%: {tile.TotalPlaytimePercent} | Last: {tile.LastPlaytime} | " +
                     $"Last%: {tile.LastPlaytimePercent}");
             }
@@ -124,6 +124,18 @@ public class TileContainer
         }
     }
 
+    public void UpdateTileNameById(int id, string newValue)
+    {
+        foreach (var tile in tilesList)
+        {
+            if (tile.Id.Equals(id))
+            {
+                tile.GameName = newValue;
+                tile.InitializeTile();
+            }
+        }
+    }
+
     public double CalculateTotalPlaytime()
     {
         double playtime = 0;
@@ -133,5 +145,19 @@ public class TileContainer
         }
 
         return playtime;
+    }
+
+    public void UpdatePlaytimeBars()
+    {
+        double globalTotalPlaytime = CalculateTotalPlaytime();
+        foreach (var tile in tilesList)
+        {
+            tile.totalTimeGradientBar.Percent = Math.Round(tile.TotalPlaytime / globalTotalPlaytime, 2);
+        }
+
+        foreach (var tile in tilesList)
+        {
+            tile.totalTimeGradientBar.InitializeBar();
+        }
     }
 }

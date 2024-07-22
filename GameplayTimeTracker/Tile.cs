@@ -81,7 +81,6 @@ public class GradientBar : UserControl
 public class Tile : UserControl
 {
     private TileContainer _tileContainer;
-    private List<UIElement> menuItems = new List<UIElement>();
     private const int TextMargin = 10;
     private const int TitleFontSize = 17;
     private const int TextFontSize = 14;
@@ -171,21 +170,24 @@ public class Tile : UserControl
 
             editPlaytimeTitle.Margin = new Thickness(300, 12, 0, 0);
             editPlaytimeBoxH.Margin = new Thickness(370, 10, 0, 0);
-            editPlaytimeH.Margin = new Thickness(425, 12, 0, 0);
-            
             editPlaytimeBoxM.Margin = new Thickness(440, 10, 0, 0);
+            editPlaytimeH.Margin = new Thickness(425, 12, 0, 0);
             editPlaytimeM.Margin = new Thickness(495, 12, 0, 0);
 
 
             menuRectangle.MaxHeight = TileHeight;
+
             editNameTitle.MaxHeight = 30;
-            editPlaytimeTitle.MaxHeight = 30;
-            editPlaytimeH.MaxHeight = 30;
-            editPlaytimeM.MaxHeight = 30;
             editNameBox.Height = TextBoxHeight;
             editNameBox.MaxHeight = TextBoxHeight;
+
+            editPlaytimeTitle.MaxHeight = 30;
             editPlaytimeBoxH.MaxHeight = TextBoxHeight;
+            editPlaytimeBoxH.Height = TextBoxHeight;
+            editPlaytimeBoxM.Height = TextBoxHeight;
             editPlaytimeBoxM.MaxHeight = TextBoxHeight;
+            editPlaytimeH.MaxHeight = 30;
+            editPlaytimeM.MaxHeight = 30;
 
             wasOpened = true;
         }
@@ -197,6 +199,7 @@ public class Tile : UserControl
                 menuRectangle.Visibility = Visibility.Collapsed;
                 editNameTitle.Visibility = Visibility.Collapsed;
                 editNameBox.Visibility = Visibility.Collapsed;
+                editPlaytimeTitle.Visibility = Visibility.Collapsed;
                 editPlaytimeBoxH.Visibility = Visibility.Collapsed;
                 editPlaytimeH.Visibility = Visibility.Collapsed;
                 editPlaytimeBoxM.Visibility = Visibility.Collapsed;
@@ -207,6 +210,7 @@ public class Tile : UserControl
                 menuRectangle.Visibility = Visibility.Visible;
                 editNameTitle.Visibility = Visibility.Visible;
                 editNameBox.Visibility = Visibility.Visible;
+                editPlaytimeTitle.Visibility = Visibility.Visible;
                 editPlaytimeBoxH.Visibility = Visibility.Visible;
                 editPlaytimeH.Visibility = Visibility.Visible;
                 editPlaytimeBoxM.Visibility = Visibility.Visible;
@@ -220,6 +224,7 @@ public class Tile : UserControl
             menuRectangle.Visibility = Visibility.Visible;
             editNameTitle.Visibility = Visibility.Visible;
             editNameBox.Visibility = Visibility.Visible;
+            editPlaytimeTitle.Visibility = Visibility.Visible;
             editPlaytimeBoxH.Visibility = Visibility.Visible;
             editPlaytimeH.Visibility = Visibility.Visible;
             editPlaytimeBoxM.Visibility = Visibility.Visible;
@@ -232,8 +237,10 @@ public class Tile : UserControl
         editNameBox.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
         editPlaytimeBoxH.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
         editPlaytimeBoxM.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
+        editPlaytimeTitle.BeginAnimation(Rectangle.OpacityProperty, heightAnimationBox);
 
         editNameTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
+        editPlaytimeTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editNameBox.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editPlaytimeBoxH.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editPlaytimeBoxM.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
@@ -417,7 +424,7 @@ public class Tile : UserControl
             VerticalAlignment = VerticalAlignment.Top,
             MaxHeight = 0
         };
-        
+
         Grid.SetRow(menuRectangle, 1);
         Grid.SetRow(editNameTitle, 1);
         Grid.SetRow(editNameBox, 1);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Mime;
 using System.Windows;
@@ -80,12 +81,14 @@ public class GradientBar : UserControl
 public class Tile : UserControl
 {
     private TileContainer _tileContainer;
+    private List<UIElement> menuItems = new List<UIElement>();
     private const int TextMargin = 10;
     private const int TitleFontSize = 17;
     private const int TextFontSize = 14;
     private const double Height = 150;
     private const double BorderRadius = 10;
     private const int MenuTopMargin = -20;
+    private const int TextBoxHeight = 25;
     private bool isMenuOpen = false;
     private bool wasOpened = false;
 
@@ -100,6 +103,13 @@ public class Tile : UserControl
     private TextBlock totalPlaytime;
     private TextBlock lastPlaytimeTitle;
     private TextBlock lastPlaytime;
+    private TextBox editNameBox;
+    private TextBlock editNameTitle;
+    private TextBox editPlaytimeBoxH;
+    private TextBox editPlaytimeBoxM;
+    private TextBlock editPlaytimeTitle;
+    private TextBlock editPlaytimeH;
+    private TextBlock editPlaytimeM;
     private GradientBar totalTimeGradientBar;
     private GradientBar lastTimeGradientBar;
 
@@ -131,10 +141,18 @@ public class Tile : UserControl
     {
         isMenuOpen = !isMenuOpen;
         double animationDuration = 0.15;
+
         DoubleAnimation heightAnimation = new DoubleAnimation
         {
             From = isMenuOpen ? 0 : TileHeight,
             To = isMenuOpen ? TileHeight : 0,
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+        };
+
+        DoubleAnimation heightAnimationBox = new DoubleAnimation
+        {
+            From = isMenuOpen ? 0 : TextBoxHeight,
+            To = isMenuOpen ? TextBoxHeight : 0,
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
 
@@ -148,7 +166,27 @@ public class Tile : UserControl
         if (!wasOpened)
         {
             menuRectangle.Margin = new Thickness(0, MenuTopMargin, 0, 0);
+            editNameTitle.Margin = new Thickness(50, 12, 0, 0);
+            editNameBox.Margin = new Thickness(100, 10, 0, 0);
+
+            editPlaytimeTitle.Margin = new Thickness(300, 12, 0, 0);
+            editPlaytimeBoxH.Margin = new Thickness(370, 10, 0, 0);
+            editPlaytimeH.Margin = new Thickness(425, 12, 0, 0);
+            
+            editPlaytimeBoxM.Margin = new Thickness(440, 10, 0, 0);
+            editPlaytimeM.Margin = new Thickness(495, 12, 0, 0);
+
+
             menuRectangle.MaxHeight = TileHeight;
+            editNameTitle.MaxHeight = 30;
+            editPlaytimeTitle.MaxHeight = 30;
+            editPlaytimeH.MaxHeight = 30;
+            editPlaytimeM.MaxHeight = 30;
+            editNameBox.Height = TextBoxHeight;
+            editNameBox.MaxHeight = TextBoxHeight;
+            editPlaytimeBoxH.MaxHeight = TextBoxHeight;
+            editPlaytimeBoxM.MaxHeight = TextBoxHeight;
+
             wasOpened = true;
         }
 
@@ -157,10 +195,22 @@ public class Tile : UserControl
             if (!isMenuOpen)
             {
                 menuRectangle.Visibility = Visibility.Collapsed;
+                editNameTitle.Visibility = Visibility.Collapsed;
+                editNameBox.Visibility = Visibility.Collapsed;
+                editPlaytimeBoxH.Visibility = Visibility.Collapsed;
+                editPlaytimeH.Visibility = Visibility.Collapsed;
+                editPlaytimeBoxM.Visibility = Visibility.Collapsed;
+                editPlaytimeM.Visibility = Visibility.Collapsed;
             }
             else
             {
                 menuRectangle.Visibility = Visibility.Visible;
+                editNameTitle.Visibility = Visibility.Visible;
+                editNameBox.Visibility = Visibility.Visible;
+                editPlaytimeBoxH.Visibility = Visibility.Visible;
+                editPlaytimeH.Visibility = Visibility.Visible;
+                editPlaytimeBoxM.Visibility = Visibility.Visible;
+                editPlaytimeM.Visibility = Visibility.Visible;
             }
         };
 
@@ -168,11 +218,25 @@ public class Tile : UserControl
         if (isMenuOpen)
         {
             menuRectangle.Visibility = Visibility.Visible;
+            editNameTitle.Visibility = Visibility.Visible;
+            editNameBox.Visibility = Visibility.Visible;
+            editPlaytimeBoxH.Visibility = Visibility.Visible;
+            editPlaytimeH.Visibility = Visibility.Visible;
+            editPlaytimeBoxM.Visibility = Visibility.Visible;
+            editPlaytimeM.Visibility = Visibility.Visible;
         }
 
         // Apply the animations to the menuRectangle
         menuRectangle.BeginAnimation(Rectangle.HeightProperty, heightAnimation);
         menuRectangle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
+        editNameBox.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
+        editPlaytimeBoxH.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
+        editPlaytimeBoxM.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
+
+        editNameTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
+        editNameBox.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
+        editPlaytimeBoxH.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
+        editPlaytimeBoxM.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
 
         Console.WriteLine(isMenuOpen);
     }
@@ -271,6 +335,106 @@ public class Tile : UserControl
             MaxHeight = 0
         };
 
+        editNameTitle = new TextBlock
+        {
+            Text = "Name",
+            FontWeight = FontWeights.Bold,
+            FontSize = TextFontSize,
+            Foreground = new SolidColorBrush(DarkColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            MaxHeight = 0
+        };
+
+        editNameBox = new TextBox
+        {
+            Style = (Style)Application.Current.FindResource("RoundedTextBox"),
+            Text = Text,
+            Width = 150,
+            MaxHeight = 0,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            TextAlignment = TextAlignment.Left, // Center-align text horizontally
+            HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
+            VerticalContentAlignment = VerticalAlignment.Center
+        };
+
+        editPlaytimeTitle = new TextBlock
+        {
+            Text = "Playtime",
+            FontWeight = FontWeights.Bold,
+            FontSize = TextFontSize,
+            Foreground = new SolidColorBrush(DarkColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            MaxHeight = 0
+        };
+
+        editPlaytimeBoxH = new TextBox
+        {
+            Style = (Style)Application.Current.FindResource("RoundedTextBox"),
+            Text = TotalPlaytime.ToString(),
+            Width = 50,
+            MaxHeight = 0,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            TextAlignment = TextAlignment.Left, // Center-align text horizontally
+            HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
+            VerticalContentAlignment = VerticalAlignment.Center
+        };
+
+        editPlaytimeH = new TextBlock
+        {
+            Text = "H",
+            FontWeight = FontWeights.Bold,
+            FontSize = TextFontSize,
+            Foreground = new SolidColorBrush(DarkColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            MaxHeight = 0
+        };
+
+        editPlaytimeBoxM = new TextBox
+        {
+            Style = (Style)Application.Current.FindResource("RoundedTextBox"),
+            Text = TotalPlaytime.ToString(),
+            Width = 50,
+            MaxHeight = 0,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            TextAlignment = TextAlignment.Left, // Center-align text horizontally
+            HorizontalContentAlignment = HorizontalAlignment.Left, // Center-align content horizontally
+            VerticalContentAlignment = VerticalAlignment.Center
+        };
+
+        editPlaytimeM = new TextBlock
+        {
+            Text = "M",
+            FontWeight = FontWeights.Bold,
+            FontSize = TextFontSize,
+            Foreground = new SolidColorBrush(DarkColor),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            MaxHeight = 0
+        };
+        
+        Grid.SetRow(menuRectangle, 1);
+        Grid.SetRow(editNameTitle, 1);
+        Grid.SetRow(editNameBox, 1);
+        Grid.SetRow(editPlaytimeTitle, 1);
+        Grid.SetRow(editPlaytimeH, 1);
+        Grid.SetRow(editPlaytimeM, 1);
+        Grid.SetRow(editPlaytimeBoxH, 1);
+        Grid.SetRow(editPlaytimeBoxM, 1);
+        grid.Children.Add(menuRectangle);
+        grid.Children.Add(editNameTitle);
+        grid.Children.Add(editNameBox);
+        grid.Children.Add(editPlaytimeTitle);
+        grid.Children.Add(editPlaytimeH);
+        grid.Children.Add(editPlaytimeM);
+        grid.Children.Add(editPlaytimeBoxH);
+        grid.Children.Add(editPlaytimeBoxM);
+
         // Create the second Rectangle
         container = new Rectangle
         {
@@ -303,9 +467,6 @@ public class Tile : UserControl
         };
         removeButton.Click += DeleteTile;
 
-        // Place the rectangles in separate rows
-        Grid.SetRow(menuRectangle, 1);
-        grid.Children.Add(menuRectangle);
 
         Grid.SetRow(container, 0);
         Grid.SetRow(editButton, 0);

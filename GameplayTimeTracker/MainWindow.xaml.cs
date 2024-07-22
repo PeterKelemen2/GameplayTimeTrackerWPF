@@ -69,15 +69,5 @@ namespace GameplayTimeTracker
                 OverlayBottom.Visibility = Visibility.Collapsed;
             }
         }
-
-        private double CalculateTileWidth(bool isScrollbarPresent)
-        {
-            if (isScrollbarPresent)
-            {
-                return ActualWidth - (2 * Offset + 2 * SystemParameters.VerticalScrollBarWidth);
-            }
-
-            return ActualWidth - (2 * Offset + SystemParameters.VerticalScrollBarWidth);
-        }
     }
 }

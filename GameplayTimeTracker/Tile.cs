@@ -113,6 +113,10 @@ public class Tile : UserControl
     private GradientBar totalTimeGradientBar;
     private GradientBar lastTimeGradientBar;
 
+    private double hTotal;
+    private double mTotal;
+    private double hLast;
+    private double mLast;
 
     private const string SampleImagePath = "/assets/fallout3.png";
 
@@ -156,6 +160,13 @@ public class Tile : UserControl
             Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
         };
 
+        DoubleAnimation heightAnimationButton = new DoubleAnimation
+        {
+            From = isMenuOpen ? 0 : 40,
+            To = isMenuOpen ? 40 : 0,
+            Duration = new Duration(TimeSpan.FromSeconds(animationDuration))
+        };
+
         DoubleAnimation opacityAnimation = new DoubleAnimation
         {
             From = isMenuOpen ? 0 : 1,
@@ -191,6 +202,7 @@ public class Tile : UserControl
             editPlaytimeH.MaxHeight = 30;
             editPlaytimeM.MaxHeight = 30;
 
+            editSaveButton.Height = 40;
             editSaveButton.MaxHeight = 40;
 
             wasOpened = true;
@@ -241,19 +253,36 @@ public class Tile : UserControl
         // Apply the animations to the menuRectangle
         menuRectangle.BeginAnimation(Rectangle.HeightProperty, heightAnimation);
         menuRectangle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
+
         editNameBox.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
         editPlaytimeBoxH.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
         editPlaytimeBoxM.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
-        editPlaytimeTitle.BeginAnimation(Rectangle.OpacityProperty, heightAnimationBox);
-        editSaveButton.BeginAnimation(Rectangle.OpacityProperty, heightAnimation);
+        editPlaytimeTitle.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
+        editSaveButton.BeginAnimation(Rectangle.HeightProperty, heightAnimationButton);
 
         editNameTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editPlaytimeTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editNameBox.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editPlaytimeBoxH.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editPlaytimeBoxM.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
+        editSaveButton.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
 
         Console.WriteLine(isMenuOpen);
+    }
+
+    public void SaveEditedData(object sender, RoutedEventArgs e)
+    {
+        if (!Text.Equals(editNameBox.Text))
+        {
+            Text = editNameBox.Text;
+        }
+
+        if (hTotal.ToString().Equals(editPlaytimeBoxH.Text) || mTotal.ToString().Equals(editPlaytimeBoxM.Text))
+        {
+            TotalPlaytime = CalculatePlaytimeFromHnM(hTotal, mTotal);
+        }
+
+        InitializeTile();
     }
 
     public void DeleteTile(object sender, RoutedEventArgs e)
@@ -463,7 +492,7 @@ public class Tile : UserControl
             Margin = new Thickness(0, 0, 100, 0),
             MaxHeight = 0
         };
-        // editSaveButton.Click += ToggleEdit;
+        editSaveButton.Click += SaveEditedData;
 
         Grid.SetRow(menuRectangle, 1);
         Grid.SetRow(editNameTitle, 1);

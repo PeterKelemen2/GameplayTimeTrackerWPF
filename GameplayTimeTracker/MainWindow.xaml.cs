@@ -19,6 +19,7 @@ namespace GameplayTimeTracker
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // AddTilesToCanvas(20, CalculateTileWidth(), 150, 10);
+            tileContainer.AddTile(new Tile(tileContainer, "Game1", 3241, 1233));
             tileContainer.AddTile(new Tile(tileContainer, "Game1", 120, 40));
             tileContainer.AddTile(new Tile(tileContainer, "Game2", 300, 20));
             tileContainer.AddTile(new Tile(tileContainer, "Game3", 50, 25));

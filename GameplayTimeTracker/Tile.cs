@@ -297,6 +297,20 @@ public class Tile : UserControl
         set { SetValue(TextProperty, value); }
     }
 
+    private (double, double) CalculatePlaytime(double playtime)
+    {
+        double h = 0;
+
+        double aux = playtime;
+
+        while (aux >= 60)
+        {
+            h += 1;
+            aux -= 60;
+        }
+
+        return (h, aux);
+    }
 
     public static readonly DependencyProperty TextProperty =
         DependencyProperty.Register("Text", typeof(string), typeof(Tile), new PropertyMetadata(""));
@@ -323,7 +337,8 @@ public class Tile : UserControl
     {
         // Create a Grid to hold the Rectangle and TextBlock
         grid = new Grid();
-
+        (double hTotal, double mTotal) = CalculatePlaytime(TotalPlaytime);
+        (double hLast, double mLast) = CalculatePlaytime(LastPlaytime);
         // Define the grid rows
         RowDefinition row1 = new RowDefinition();
         RowDefinition row2 = new RowDefinition();
@@ -380,7 +395,7 @@ public class Tile : UserControl
         editPlaytimeBoxH = new TextBox
         {
             Style = (Style)Application.Current.FindResource("RoundedTextBox"),
-            Text = TotalPlaytime.ToString(),
+            Text = hTotal.ToString(),
             Width = 50,
             MaxHeight = 0,
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -404,7 +419,7 @@ public class Tile : UserControl
         editPlaytimeBoxM = new TextBox
         {
             Style = (Style)Application.Current.FindResource("RoundedTextBox"),
-            Text = TotalPlaytime.ToString(),
+            Text = mTotal.ToString(),
             Width = 50,
             MaxHeight = 0,
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -529,7 +544,7 @@ public class Tile : UserControl
 
         totalPlaytime = new TextBlock
         {
-            Text = $"{TotalPlaytime}m",
+            Text = $"{hTotal}h {mTotal}m",
             FontWeight = FontWeights.Normal,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),
@@ -566,7 +581,7 @@ public class Tile : UserControl
 
         lastPlaytime = new TextBlock
         {
-            Text = $"{LastPlaytime}m",
+            Text = $"{hLast}h {mLast}m",
             FontWeight = FontWeights.Normal,
             FontSize = TextFontSize,
             Foreground = new SolidColorBrush(FontColor),

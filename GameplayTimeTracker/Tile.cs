@@ -96,6 +96,7 @@ public class Tile : UserControl
     private Rectangle container;
     private Button editButton;
     private Button removeButton;
+    private Button editSaveButton;
     private Image image;
     private TextBlock titleTextBlock;
     private TextBlock totalPlaytimeTitle;
@@ -174,6 +175,7 @@ public class Tile : UserControl
             editPlaytimeH.Margin = new Thickness(425, 12, 0, 0);
             editPlaytimeM.Margin = new Thickness(495, 12, 0, 0);
 
+            editSaveButton.Margin = new Thickness(0, 0, 60, 0);
 
             menuRectangle.MaxHeight = TileHeight;
 
@@ -188,6 +190,8 @@ public class Tile : UserControl
             editPlaytimeBoxM.MaxHeight = TextBoxHeight;
             editPlaytimeH.MaxHeight = 30;
             editPlaytimeM.MaxHeight = 30;
+
+            editSaveButton.MaxHeight = 40;
 
             wasOpened = true;
         }
@@ -204,6 +208,7 @@ public class Tile : UserControl
                 editPlaytimeH.Visibility = Visibility.Collapsed;
                 editPlaytimeBoxM.Visibility = Visibility.Collapsed;
                 editPlaytimeM.Visibility = Visibility.Collapsed;
+                editSaveButton.Visibility = Visibility.Collapsed;
             }
             else
             {
@@ -215,6 +220,7 @@ public class Tile : UserControl
                 editPlaytimeH.Visibility = Visibility.Visible;
                 editPlaytimeBoxM.Visibility = Visibility.Visible;
                 editPlaytimeM.Visibility = Visibility.Visible;
+                editSaveButton.Visibility = Visibility.Visible;
             }
         };
 
@@ -229,6 +235,7 @@ public class Tile : UserControl
             editPlaytimeH.Visibility = Visibility.Visible;
             editPlaytimeBoxM.Visibility = Visibility.Visible;
             editPlaytimeM.Visibility = Visibility.Visible;
+            editSaveButton.Visibility = Visibility.Visible;
         }
 
         // Apply the animations to the menuRectangle
@@ -238,6 +245,7 @@ public class Tile : UserControl
         editPlaytimeBoxH.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
         editPlaytimeBoxM.BeginAnimation(Rectangle.HeightProperty, heightAnimationBox);
         editPlaytimeTitle.BeginAnimation(Rectangle.OpacityProperty, heightAnimationBox);
+        editSaveButton.BeginAnimation(Rectangle.OpacityProperty, heightAnimation);
 
         editNameTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
         editPlaytimeTitle.BeginAnimation(Rectangle.OpacityProperty, opacityAnimation);
@@ -297,7 +305,7 @@ public class Tile : UserControl
         set { SetValue(TextProperty, value); }
     }
 
-    private (double, double) CalculatePlaytime(double playtime)
+    private (double, double) CalculatePlaytimeFromMinutes(double playtime)
     {
         double h = 0;
 
@@ -310,6 +318,11 @@ public class Tile : UserControl
         }
 
         return (h, aux);
+    }
+
+    private double CalculatePlaytimeFromHnM(double h, double m)
+    {
+        return 60 * h + m;
     }
 
     public static readonly DependencyProperty TextProperty =
@@ -337,8 +350,8 @@ public class Tile : UserControl
     {
         // Create a Grid to hold the Rectangle and TextBlock
         grid = new Grid();
-        (double hTotal, double mTotal) = CalculatePlaytime(TotalPlaytime);
-        (double hLast, double mLast) = CalculatePlaytime(LastPlaytime);
+        (double hTotal, double mTotal) = CalculatePlaytimeFromMinutes(TotalPlaytime);
+        (double hLast, double mLast) = CalculatePlaytimeFromMinutes(LastPlaytime);
         // Define the grid rows
         RowDefinition row1 = new RowDefinition();
         RowDefinition row2 = new RowDefinition();
@@ -440,6 +453,18 @@ public class Tile : UserControl
             MaxHeight = 0
         };
 
+        editSaveButton = new Button
+        {
+            Style = (Style)Application.Current.FindResource("RoundedButtonSave"),
+            Height = 40,
+            Width = 96,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(0, 0, 100, 0),
+            MaxHeight = 0
+        };
+        // editSaveButton.Click += ToggleEdit;
+
         Grid.SetRow(menuRectangle, 1);
         Grid.SetRow(editNameTitle, 1);
         Grid.SetRow(editNameBox, 1);
@@ -448,6 +473,7 @@ public class Tile : UserControl
         Grid.SetRow(editPlaytimeM, 1);
         Grid.SetRow(editPlaytimeBoxH, 1);
         Grid.SetRow(editPlaytimeBoxM, 1);
+        Grid.SetRow(editSaveButton, 1);
         grid.Children.Add(menuRectangle);
         grid.Children.Add(editNameTitle);
         grid.Children.Add(editNameBox);
@@ -456,6 +482,7 @@ public class Tile : UserControl
         grid.Children.Add(editPlaytimeM);
         grid.Children.Add(editPlaytimeBoxH);
         grid.Children.Add(editPlaytimeBoxM);
+        grid.Children.Add(editSaveButton);
 
         // Create the second Rectangle
         container = new Rectangle

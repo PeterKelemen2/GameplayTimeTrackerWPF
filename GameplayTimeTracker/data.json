@@ -1,7 +1,12 @@
 ﻿[
   {
-    "gameName": "Test",
-    "totalTime": 1,
-    "lastPlayedTime": 2
+    "gameName": "Game1",
+    "totalTime": 120.0,
+    "lastPlayedTime": 5.0
+  },
+  {
+    "gameName": "Game2",
+    "totalTime": 200.0,
+    "lastPlayedTime": 10.0
   }
 ]

@@ -2,11 +2,13 @@
   {
     "gameName": "Game1",
     "totalTime": 120.0,
-    "lastPlayedTime": 5.0
+    "lastPlayedTime": 5.0,
+    "iconPath": "assets/fallout3.png"
   },
   {
     "gameName": "Game2",
     "totalTime": 200.0,
-    "lastPlayedTime": 10.0
+    "lastPlayedTime": 10.0,
+    "iconPath": "assets/fallout3.png"
   }
 ]

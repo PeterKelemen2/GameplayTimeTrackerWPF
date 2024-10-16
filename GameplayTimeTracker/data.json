@@ -1,0 +1,30 @@
+[
+  {
+    "gameName": "Far Cry 3",
+    "totalTime": 175,
+    "lastPlayedTime": 30,
+    "iconPath": "assets/farcry3.png",
+    "exePath": "F:\\Games\\Far Cry 3\\bin\\farcry3.exe"
+  },
+  {
+    "gameName": "Lossless Scaling",
+    "totalTime": 72,
+    "lastPlayedTime": 13,
+    "iconPath": "assets/bf67cf7b-d685-4cfa-9330-dce10757662c.png",
+    "exePath": "E:\\Lossless.Scaling.v2.11\\game\\LosslessScaling.exe"
+  },
+  {
+    "gameName": "My nigga notepad",
+    "totalTime": 61,
+    "lastPlayedTime": 19,
+    "iconPath": "assets/d63716bc-0964-4740-bee7-1f262b0712d8.png",
+    "exePath": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2408.12.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe"
+  },
+  {
+    "gameName": "VSCodium",
+    "totalTime": 0,
+    "lastPlayedTime": 0,
+    "iconPath": "assets/2dc30339-08cf-4e20-9c18-bec6783941ef.png",
+    "exePath": "C:\\Program Files\\VSCodium\\VSCodium.exe"
+  }
+]
